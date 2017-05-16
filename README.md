@@ -5,7 +5,6 @@
 [![Coverage Status](https://coveralls.io/repos/fractalsoft/diacritics/badge.png)](https://coveralls.io/r/fractalsoft/diacritics)
 [![Code Climate](https://codeclimate.com/repos/5284c9f156b1021a6e016740/badges/030f7f569aa0fa54ea66/gpa.png)](https://codeclimate.com/repos/5284c9f156b1021a6e016740/feed)
 [![Stories in Ready](https://badge.waffle.io/fractalsoft/diacritics.png)](http://waffle.io/fractalsoft/diacritics)
-[![endorse](https://api.coderwall.com/torrocus/endorsecount.png)](https://coderwall.com/torrocus)
 
 Diacritics is a gem which support downcase, upcase and permanent link with diacritical characters.
 
@@ -50,3 +49,6 @@ and use
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Please remember about tests. Before you add new characters add test first and check that this test doesn't pass.
+Many of characters are the same in different languages.
