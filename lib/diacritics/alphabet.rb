@@ -9,15 +9,18 @@ module Diacritics
   class Alphabet
     attr_reader :regexp, :hash
 
-    def initialize
+    LANGUAGES = %i[cs de en eo fr gr hu is it nn pl pt ru sp].freeze
+
+    def initialize(lang = nil)
       @downcase, @upcase, @permanent = [], [], []
+      @languages = lang.nil? ? LANGUAGES : Array(lang) & LANGUAGES
       prepare_alphabet
       @hash, @regexp = prepare_hash, prepare_regexp
     end
 
     private
 
-    attr_reader :downcase, :permanent, :upcase
+    attr_reader :downcase, :permanent, :upcase, :languages
 
     def prepare_alphabet
       data.each_pair do |_language, hash|
@@ -50,10 +53,6 @@ module Diacritics
       languages.each_with_object({}) do |language, hash|
         hash[language] = send(language)
       end
-    end
-
-    def languages
-      [:en, :de, :pl, :cs, :fr, :it, :eo, :is, :pt, :sp, :hu, :nn, :ru, :gr]
     end
 
     def en

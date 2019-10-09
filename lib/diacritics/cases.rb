@@ -14,8 +14,8 @@ module Diacritics
       @instance ||= new
     end
 
-    def initialize
-      alphabet = Diacritics::Alphabet.new
+    def initialize(lang = nil)
+      alphabet = Diacritics::Alphabet.new(lang)
       @hash = alphabet.hash
       @regexp = alphabet.regexp
     end
