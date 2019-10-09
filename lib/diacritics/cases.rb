@@ -14,10 +14,11 @@ module Diacritics
       @instance ||= new
     end
 
-    def initialize(lang: nil, space_replace_char: '-')
-      alphabet = Diacritics::Alphabet.new(lang: lang, space_replace_char: space_replace_char)
+    def initialize(lang: nil, space_replace_char: nil)
+      @alphabet = Diacritics::Alphabet.new(lang: lang, space_replace_char: space_replace_char)
       @hash = alphabet.hash
       @regexp = alphabet.regexp
+      @space_replace_char = space_replace_char
     end
 
     def downcase(text)
@@ -28,8 +29,17 @@ module Diacritics
       text.old_upcase.gsub @regexp[:upcase], @hash[:upcase]
     end
 
-    def permanent(text)
+    def permanent(text, space_replace_char = nil)
+      if space_replace_char && space_replace_char != @space_replace_char
+        @hash, @regexp = alphabet.reload_permanent(space_replace_char)
+        @space_replace_char = space_replace_char
+      end
+
       text.old_downcase.gsub @regexp[:permanent], @hash[:permanent]
     end
+
+    private
+
+    attr_reader :alphabet
   end
 end

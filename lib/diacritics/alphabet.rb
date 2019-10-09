@@ -9,11 +9,18 @@ module Diacritics
   class Alphabet
     attr_reader :regexp, :hash
 
-    LANGUAGES = %i[cs de en eo fr gr hu is it nn pl pt ru sp].freeze
+    LANGUAGES = %i[cs de en eo fr gr hu is it nn pl pt ru sp xx].freeze
 
-    def initialize(lang: nil, space_replace_char: '-')
+    def initialize(lang: nil, space_replace_char: nil)
+      @space_replace_char = space_replace_char || '-'
+      @languages = lang.nil? ? LANGUAGES.dup : Array(lang) & LANGUAGES
+      @languages << :xx unless space_replace_char.nil?
+      prepare_alphabet
+      @hash, @regexp = prepare_hash, prepare_regexp
+    end
+
+    def reload_permanent(space_replace_char)
       @space_replace_char = space_replace_char
-      @languages = lang.nil? ? LANGUAGES : Array(lang) & LANGUAGES
       prepare_alphabet
       @hash, @regexp = prepare_hash, prepare_regexp
     end
@@ -21,12 +28,6 @@ module Diacritics
     private
 
     attr_reader :downcase, :permanent, :upcase, :languages, :space_replace_char
-
-    def reload_permanent(space_replace_char)
-      @space_replace_char = space_replace_char
-      prepare_alphabet
-      @hash, @regexp = prepare_hash, prepare_regexp
-    end
 
     def prepare_alphabet
       @downcase, @upcase, @permanent = [], [], []
@@ -63,11 +64,19 @@ module Diacritics
       end
     end
 
-    def en
-      { # English
+    def xx
+      { # Extras
         downcase:  [' ', '!', ',', '.', ':', '?', '«', '»'],
         upcase:    [' ', '!', ',', '.', ':', '?', '«', '»'],
         permanent: [space_replace_char, '', '', '', '', '', '', '']
+      }
+    end
+
+    def en
+      { # English
+        downcase: [],
+        upcase: [],
+        permanent: []
       }
     end
 
