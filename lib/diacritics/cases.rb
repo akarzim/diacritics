@@ -14,8 +14,8 @@ module Diacritics
       @instance ||= new
     end
 
-    def initialize(lang = nil)
-      alphabet = Diacritics::Alphabet.new(lang)
+    def initialize(lang: nil, space_replace_char: '-')
+      alphabet = Diacritics::Alphabet.new(lang: lang, space_replace_char: space_replace_char)
       @hash = alphabet.hash
       @regexp = alphabet.regexp
     end

@@ -11,8 +11,8 @@ module Diacritics
 
     LANGUAGES = %i[cs de en eo fr gr hu is it nn pl pt ru sp].freeze
 
-    def initialize(lang = nil)
-      @downcase, @upcase, @permanent = [], [], []
+    def initialize(lang: nil, space_replace_char: '-')
+      @space_replace_char = space_replace_char
       @languages = lang.nil? ? LANGUAGES : Array(lang) & LANGUAGES
       prepare_alphabet
       @hash, @regexp = prepare_hash, prepare_regexp
@@ -20,9 +20,17 @@ module Diacritics
 
     private
 
-    attr_reader :downcase, :permanent, :upcase, :languages
+    attr_reader :downcase, :permanent, :upcase, :languages, :space_replace_char
+
+    def reload_permanent(space_replace_char)
+      @space_replace_char = space_replace_char
+      prepare_alphabet
+      @hash, @regexp = prepare_hash, prepare_regexp
+    end
 
     def prepare_alphabet
+      @downcase, @upcase, @permanent = [], [], []
+
       data.each_pair do |_language, hash|
         @downcase += hash[:downcase]
         @upcase += hash[:upcase]
@@ -59,7 +67,7 @@ module Diacritics
       { # English
         downcase:  [' ', '!', ',', '.', ':', '?', '«', '»'],
         upcase:    [' ', '!', ',', '.', ':', '?', '«', '»'],
-        permanent: ['-', '', '', '', '', '', '', '']
+        permanent: [space_replace_char, '', '', '', '', '', '', '']
       }
     end
 
